@@ -17,7 +17,9 @@ class RemoteSurveyAnswerModel {
   });
 
   factory RemoteSurveyAnswerModel.fromJson(Map json) {
-    if (!json.keys.toSet().containsAll(['answer', 'isCurrentAccountAnswer', 'percent'])) {
+    if (!json.keys
+        .toSet()
+        .containsAll(['answer', 'isCurrentAccountAnswer', 'percent'])) {
       throw HttpError.invalidData;
     }
     return RemoteSurveyAnswerModel(
@@ -29,9 +31,9 @@ class RemoteSurveyAnswerModel {
   }
 
   SurveyAnswerEntity toEntity() => SurveyAnswerEntity(
-    image: image,
-    answer: answer,
-    isCurrentAnswer: isCurrentAccountAnswer,
-    percent: percent,
-  );
+        image: image,
+        answer: answer,
+        isCurrentAnswer: isCurrentAccountAnswer,
+        percent: percent,
+      );
 }

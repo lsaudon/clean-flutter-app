@@ -10,7 +10,9 @@ import 'package:ForDev/main/composites/composites.dart';
 import '../../mocks/mocks.dart';
 
 class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
-class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
+
+class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {
+}
 
 void main() {
   RemoteLoadSurveyResultWithLocalFallback sut;
@@ -20,32 +22,33 @@ void main() {
   SurveyResultEntity remoteSurveyResult;
   SurveyResultEntity localSurveyResult;
 
-  PostExpectation mockRemoteLoadBySurveyCall() => when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
+  PostExpectation mockRemoteLoadBySurveyCall() =>
+      when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
 
   void mockRemoteLoadBySurvey() {
     remoteSurveyResult = FakeSurveyResultFactory.makeEntity();
     mockRemoteLoadBySurveyCall().thenAnswer((_) async => remoteSurveyResult);
   }
 
-  void mockRemoteLoadBySurveyError(DomainError error) => mockRemoteLoadBySurveyCall().thenThrow(error);
+  void mockRemoteLoadBySurveyError(DomainError error) =>
+      mockRemoteLoadBySurveyCall().thenThrow(error);
 
-  PostExpectation mockLocalLoadBySurveyCall() => when(local.loadBySurvey(surveyId: anyNamed('surveyId')));
+  PostExpectation mockLocalLoadBySurveyCall() =>
+      when(local.loadBySurvey(surveyId: anyNamed('surveyId')));
 
   void mockLocalLoadBySurvey() {
     localSurveyResult = FakeSurveyResultFactory.makeEntity();
     mockLocalLoadBySurveyCall().thenAnswer((_) async => localSurveyResult);
   }
 
-  void mockLocalLoadBySurveyError() => mockLocalLoadBySurveyCall().thenThrow(DomainError.unexpected);
+  void mockLocalLoadBySurveyError() =>
+      mockLocalLoadBySurveyCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     surveyId = faker.guid.guid();
     remote = RemoteLoadSurveyResultSpy();
     local = LocalLoadSurveyResultSpy();
-    sut = RemoteLoadSurveyResultWithLocalFallback(
-      remote: remote,
-      local: local
-    );
+    sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
     mockRemoteLoadBySurvey();
     mockLocalLoadBySurvey();
   });
@@ -68,7 +71,8 @@ void main() {
     expect(response, remoteSurveyResult);
   });
 
-  test('Should rethrow if remote loadBySurvey throws AccessDeniedError', () async {
+  test('Should rethrow if remote loadBySurvey throws AccessDeniedError',
+      () async {
     mockRemoteLoadBySurveyError(DomainError.accessDenied);
 
     final future = sut.loadBySurvey(surveyId: surveyId);
@@ -93,7 +97,8 @@ void main() {
     expect(response, localSurveyResult);
   });
 
-  test('Should throw UnexpectedError if remote and local loadBySurvey throws', () async {
+  test('Should throw UnexpectedError if remote and local loadBySurvey throws',
+      () async {
     mockRemoteLoadBySurveyError(DomainError.unexpected);
     mockLocalLoadBySurveyError();
 

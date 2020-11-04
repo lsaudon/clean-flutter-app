@@ -5,19 +5,20 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
 import '../../mixins/mixins.dart';
-import './components/components.dart';
-import './surveys.dart';
+import 'components/components.dart';
+import 'surveys.dart';
 
 class SurveysPage extends StatefulWidget {
   final SurveysPresenter presenter;
 
-  SurveysPage(this.presenter);
+  const SurveysPage(this.presenter, {Key key}) : super(key: key);
 
   @override
   _SurveysPageState createState() => _SurveysPageState();
 }
 
-class _SurveysPageState extends State<SurveysPage> with LoadingManager, NavigationManager, SessionManager, RouteAware {
+class _SurveysPageState extends State<SurveysPage>
+    with LoadingManager, NavigationManager, SessionManager, RouteAware {
   @override
   Widget build(BuildContext context) {
     Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context));
@@ -31,20 +32,19 @@ class _SurveysPageState extends State<SurveysPage> with LoadingManager, Navigati
           widget.presenter.loadData();
 
           return StreamBuilder<List<SurveyViewModel>>(
-            stream: widget.presenter.surveysStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return ReloadScreen(error: snapshot.error, reload: widget.presenter.loadData);
-              }
-              if (snapshot.hasData) {
-                return Provider(
-                  create: (_) => widget.presenter,
-                  child: SurveyItems(snapshot.data)
-                );
-              }
-              return SizedBox(height: 0);
-            }
-          );
+              stream: widget.presenter.surveysStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return ReloadScreen(
+                      error: snapshot.error, reload: widget.presenter.loadData);
+                }
+                if (snapshot.hasData) {
+                  return Provider(
+                      create: (_) => widget.presenter,
+                      child: SurveyItems(snapshot.data));
+                }
+                return const SizedBox(height: 0);
+              });
         },
       ),
     );

@@ -27,10 +27,13 @@ void main() {
   }
 
   void mockStreams() {
-    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.isSessionExpiredStream)
+        .thenAnswer((_) => isSessionExpiredController.stream);
     when(presenter.surveysStream).thenAnswer((_) => surveysController.stream);
-    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   }
 
   void closeStreams() {
@@ -44,20 +47,19 @@ void main() {
     presenter = SurveysPresenterSpy();
     initStreams();
     mockStreams();
-    await tester.pumpWidget(makePage(path: '/surveys', page: () => SurveysPage(presenter)));
+    await tester.pumpWidget(
+        makePage(path: '/surveys', page: () => SurveysPage(presenter)));
   }
 
-  tearDown(() {
-    closeStreams();
-  });
+  tearDown(closeStreams);
 
-  testWidgets('Should call LoadSurveys on page load', (WidgetTester tester) async {
+  testWidgets('Should call LoadSurveys on page load', (tester) async {
     await loadPage(tester);
 
     verify(presenter.loadData()).called(1);
   });
 
-  testWidgets('Should call LoadSurveys on reload', (WidgetTester tester) async {
+  testWidgets('Should call LoadSurveys on reload', (tester) async {
     await loadPage(tester);
 
     navigateToController.add('/any_route');
@@ -67,7 +69,7 @@ void main() {
     verify(presenter.loadData()).called(2);
   });
 
-  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
+  testWidgets('Should handle loading correctly', (tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -87,24 +89,26 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present error if surveysStream fails', (WidgetTester tester) async {
+  testWidgets('Should present error if surveysStream fails', (tester) async {
     await loadPage(tester);
 
     surveysController.addError(UIError.unexpected.description);
     await tester.pump();
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsOneWidget);
     expect(find.text('Recarregar'), findsOneWidget);
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('Should present list if surveysStream succeeds', (WidgetTester tester) async {
+  testWidgets('Should present list if surveysStream succeeds', (tester) async {
     await loadPage(tester);
 
     surveysController.add(FakeSurveysFactory.makeViewModel());
     await tester.pump();
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsNothing);
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsNothing);
     expect(find.text('Recarregar'), findsNothing);
     expect(find.text('Question 1'), findsWidgets);
     expect(find.text('Question 2'), findsWidgets);
@@ -112,7 +116,7 @@ void main() {
     expect(find.text('Date 2'), findsWidgets);
   });
 
-  testWidgets('Should call LoadSurveys on reload button click', (WidgetTester tester) async {
+  testWidgets('Should call LoadSurveys on reload button click', (tester) async {
     await loadPage(tester);
 
     surveysController.addError(UIError.unexpected.description);
@@ -122,7 +126,7 @@ void main() {
     verify(presenter.loadData()).called(2);
   });
 
-  testWidgets('Should call gotoSurveyResult on survey click', (WidgetTester tester) async {
+  testWidgets('Should call gotoSurveyResult on survey click', (tester) async {
     await loadPage(tester);
 
     surveysController.add(FakeSurveysFactory.makeViewModel());
@@ -134,7 +138,7 @@ void main() {
     verify(presenter.goToSurveyResult('1')).called(1);
   });
 
-  testWidgets('Should change page', (WidgetTester tester) async {
+  testWidgets('Should change page', (tester) async {
     await loadPage(tester);
 
     navigateToController.add('/any_route');
@@ -144,7 +148,7 @@ void main() {
     expect(find.text('fake page'), findsOneWidget);
   });
 
-  testWidgets('Should not change page', (WidgetTester tester) async {
+  testWidgets('Should not change page', (tester) async {
     await loadPage(tester);
 
     navigateToController.add('');
@@ -156,7 +160,7 @@ void main() {
     expect(currentRoute, '/surveys');
   });
 
-  testWidgets('Should logout', (WidgetTester tester) async {
+  testWidgets('Should logout', (tester) async {
     await loadPage(tester);
 
     isSessionExpiredController.add(true);
@@ -166,7 +170,7 @@ void main() {
     expect(find.text('fake login'), findsOneWidget);
   });
 
-  testWidgets('Should not logout', (WidgetTester tester) async {
+  testWidgets('Should not logout', (tester) async {
     await loadPage(tester);
 
     isSessionExpiredController.add(false);

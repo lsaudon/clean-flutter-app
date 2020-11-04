@@ -27,9 +27,12 @@ void main() {
   }
 
   void mockStreams() {
-    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
-    when(presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.isSessionExpiredStream)
+        .thenAnswer((_) => isSessionExpiredController.stream);
+    when(presenter.surveyResultStream)
+        .thenAnswer((_) => surveyResultController.stream);
   }
 
   void closeStreams() {
@@ -43,21 +46,21 @@ void main() {
     initStreams();
     mockStreams();
     await provideMockedNetworkImages(() async {
-      await tester.pumpWidget(makePage(path: '/survey_result/any_survey_id', page: () => SurveyResultPage(presenter)));
+      await tester.pumpWidget(makePage(
+          path: '/survey_result/any_survey_id',
+          page: () => SurveyResultPage(presenter)));
     });
   }
 
-  tearDown(() {
-    closeStreams();
-  });
+  tearDown(closeStreams);
 
-  testWidgets('Should call LoadSurveyResult on page load', (WidgetTester tester) async {
+  testWidgets('Should call LoadSurveyResult on page load', (tester) async {
     await loadPage(tester);
 
     verify(presenter.loadData()).called(1);
   });
 
-  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
+  testWidgets('Should handle loading correctly', (tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -77,18 +80,21 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present error if surveyResultStream fails', (WidgetTester tester) async {
+  testWidgets('Should present error if surveyResultStream fails',
+      (tester) async {
     await loadPage(tester);
 
     surveyResultController.addError(UIError.unexpected.description);
     await tester.pump();
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsOneWidget);
     expect(find.text('Recarregar'), findsOneWidget);
     expect(find.text('Question'), findsNothing);
   });
 
-  testWidgets('Should call LoadSurveyResult on reload button click', (WidgetTester tester) async {
+  testWidgets('Should call LoadSurveyResult on reload button click',
+      (tester) async {
     await loadPage(tester);
 
     surveyResultController.addError(UIError.unexpected.description);
@@ -98,7 +104,8 @@ void main() {
     verify(presenter.loadData()).called(2);
   });
 
-  testWidgets('Should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
+  testWidgets('Should present valid data if surveyResultStream succeeds',
+      (tester) async {
     await loadPage(tester);
 
     surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
@@ -106,7 +113,8 @@ void main() {
       await tester.pump();
     });
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsNothing);
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsNothing);
     expect(find.text('Recarregar'), findsNothing);
     expect(find.text('Question'), findsOneWidget);
     expect(find.text('Answer 0'), findsOneWidget);
@@ -115,11 +123,12 @@ void main() {
     expect(find.text('40%'), findsOneWidget);
     expect(find.byType(ActiveIcon), findsOneWidget);
     expect(find.byType(DisabledIcon), findsOneWidget);
-    final image = tester.widget<Image>(find.byType(Image)).image as NetworkImage;
+    final image =
+        tester.widget<Image>(find.byType(Image)).image as NetworkImage;
     expect(image.url, 'Image 0');
   });
 
-  testWidgets('Should logout', (WidgetTester tester) async {
+  testWidgets('Should logout', (tester) async {
     await loadPage(tester);
 
     isSessionExpiredController.add(true);
@@ -129,7 +138,7 @@ void main() {
     expect(find.text('fake login'), findsOneWidget);
   });
 
-  testWidgets('Should not logout', (WidgetTester tester) async {
+  testWidgets('Should not logout', (tester) async {
     await loadPage(tester);
 
     isSessionExpiredController.add(false);
@@ -141,7 +150,7 @@ void main() {
     expect(currentRoute, '/survey_result/any_survey_id');
   });
 
-  testWidgets('Should call save on list item click', (WidgetTester tester) async {
+  testWidgets('Should call save on list item click', (tester) async {
     await loadPage(tester);
 
     surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
@@ -153,7 +162,7 @@ void main() {
     verify(presenter.save(answer: 'Answer 1')).called(1);
   });
 
-  testWidgets('Should not call save on current answer click', (WidgetTester tester) async {
+  testWidgets('Should not call save on current answer click', (tester) async {
     await loadPage(tester);
 
     surveyResultController.add(FakeSurveyResultFactory.makeViewModel());

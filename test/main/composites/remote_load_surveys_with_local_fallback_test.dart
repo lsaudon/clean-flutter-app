@@ -9,6 +9,7 @@ import 'package:ForDev/main/composites/composites.dart';
 import '../../mocks/mocks.dart';
 
 class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {}
+
 class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {}
 
 void main() {
@@ -25,7 +26,8 @@ void main() {
     mockRemoteLoadCall().thenAnswer((_) async => remoteSurveys);
   }
 
-  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
+  void mockRemoteLoadError(DomainError error) =>
+      mockRemoteLoadCall().thenThrow(error);
 
   PostExpectation mockLocalLoadCall() => when(local.load());
 
@@ -34,15 +36,13 @@ void main() {
     mockLocalLoadCall().thenAnswer((_) async => localSurveys);
   }
 
-  void mockLocalLoadError() => mockLocalLoadCall().thenThrow(DomainError.unexpected);
+  void mockLocalLoadError() =>
+      mockLocalLoadCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     remote = RemoteLoadSurveysSpy();
     local = LocalLoadSurveysSpy();
-    sut = RemoteLoadSurveysWithLocalFallback(
-      remote: remote,
-      local: local
-    );
+    sut = RemoteLoadSurveysWithLocalFallback(remote: remote, local: local);
     mockRemoteLoad();
     mockLocalLoad();
   });

@@ -7,22 +7,26 @@ import 'package:ForDev/domain/helpers/helpers.dart';
 import 'package:ForDev/data/cache/cache.dart';
 import 'package:ForDev/data/usecases/usecases.dart';
 
-class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
+class FetchSecureCacheStorageSpy extends Mock
+    implements FetchSecureCacheStorage {}
 
 void main() {
   LocalLoadCurrentAccount sut;
   FetchSecureCacheStorageSpy fetchSecureCacheStorage;
   String token;
 
-  PostExpectation mockFetchSecureCall() => when(fetchSecureCacheStorage.fetch(any));
+  PostExpectation mockFetchSecureCall() =>
+      when(fetchSecureCacheStorage.fetch(any));
 
-  void mockFetchSecure() => mockFetchSecureCall().thenAnswer((_) async => token);
+  void mockFetchSecure() =>
+      mockFetchSecureCall().thenAnswer((_) async => token);
 
   void mockFetchSecureError() => mockFetchSecureCall().thenThrow(Exception());
 
   setUp(() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
-    sut = LocalLoadCurrentAccount(fetchSecureCacheStorage: fetchSecureCacheStorage);
+    sut = LocalLoadCurrentAccount(
+        fetchSecureCacheStorage: fetchSecureCacheStorage);
     token = faker.guid.guid();
     mockFetchSecure();
   });
@@ -39,7 +43,8 @@ void main() {
     expect(account, AccountEntity(token: token));
   });
 
-  test('Should throw UnexpectedError if FetchSecureCacheStorage throws', () async {
+  test('Should throw UnexpectedError if FetchSecureCacheStorage throws',
+      () async {
     mockFetchSecureError();
 
     final future = sut.load();

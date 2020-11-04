@@ -5,6 +5,8 @@ import '../../../helpers/helpers.dart';
 import '../signup.dart';
 
 class NameInput extends StatelessWidget {
+  const NameInput({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
@@ -14,7 +16,8 @@ class NameInput extends StatelessWidget {
         return TextFormField(
           decoration: InputDecoration(
             labelText: R.string.name,
-            icon: Icon(Icons.person, color: Theme.of(context).primaryColorLight),
+            icon:
+                Icon(Icons.person, color: Theme.of(context).primaryColorLight),
             errorText: snapshot.hasData ? snapshot.data.description : null,
           ),
           keyboardType: TextInputType.name,

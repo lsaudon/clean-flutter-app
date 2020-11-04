@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 
+import '../../data/usecases/usecases.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
-import '../../data/usecases/usecases.dart';
 
 class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
   final RemoteLoadSurveyResult remote;
@@ -14,17 +14,18 @@ class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
     @required this.local,
   });
 
+  @override
   Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
     try {
       final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
       await local.save(surveyResult);
       return surveyResult;
-    } catch(error) {
+    } catch (error) {
       if (error == DomainError.accessDenied) {
         rethrow;
       }
       await local.validate(surveyId);
-      return await local.loadBySurvey(surveyId: surveyId);
+      return local.loadBySurvey(surveyId: surveyId);
     }
   }
 }

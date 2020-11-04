@@ -11,6 +11,7 @@ class LocalLoadSurveyResult implements LoadSurveyResult {
 
   LocalLoadSurveyResult({@required this.cacheStorage});
 
+  @override
   Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
     try {
       final data = await cacheStorage.fetch('survey_result/$surveyId');
@@ -18,7 +19,7 @@ class LocalLoadSurveyResult implements LoadSurveyResult {
         throw Exception();
       }
       return LocalSurveyResultModel.fromJson(data).toEntity();
-    } catch(error) {
+    } catch (error) {
       throw DomainError.unexpected;
     }
   }
@@ -27,7 +28,7 @@ class LocalLoadSurveyResult implements LoadSurveyResult {
     try {
       final data = await cacheStorage.fetch('survey_result/$surveyId');
       LocalSurveyResultModel.fromJson(data).toEntity();
-    } catch(error) {
+    } catch (error) {
       await cacheStorage.delete('survey_result/$surveyId');
     }
   }
@@ -35,8 +36,9 @@ class LocalLoadSurveyResult implements LoadSurveyResult {
   Future<void> save(SurveyResultEntity surveyResult) async {
     try {
       final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
-      await cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json);
-    } catch(error) {
+      await cacheStorage.save(
+          key: 'survey_result/${surveyResult.surveyId}', value: json);
+    } catch (error) {
       throw DomainError.unexpected;
     }
   }

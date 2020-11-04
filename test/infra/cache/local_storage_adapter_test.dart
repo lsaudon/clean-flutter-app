@@ -13,9 +13,11 @@ void main() {
   String key;
   dynamic value;
 
-  void mockDeleteError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
+  void mockDeleteError() =>
+      when(localStorage.deleteItem(any)).thenThrow(Exception());
 
-  void mockSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
+  void mockSaveError() =>
+      when(localStorage.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -37,15 +39,15 @@ void main() {
 
       final future = sut.save(key: key, value: value);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
 
     test('Should throw if deleteItem throws', () async {
       mockSaveError();
-      
+
       final future = sut.save(key: key, value: value);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
@@ -61,7 +63,7 @@ void main() {
 
       final future = sut.delete(key);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
@@ -77,9 +79,7 @@ void main() {
 
     void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
-    setUp(() {
-      mockFetch();
-    });
+    setUp(mockFetch);
 
     test('Should call localStorage with correct value', () async {
       await sut.fetch(key);
@@ -98,7 +98,7 @@ void main() {
 
       final future = sut.fetch(key);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }

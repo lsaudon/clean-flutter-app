@@ -28,11 +28,12 @@ void main() {
   });
 
   group('post', () {
-    PostExpectation mockRequest() =>
-      when(client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
+    PostExpectation mockRequest() => when(
+        client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
 
-    void mockResponse(int statusCode, {String body = '{"any_key":"any_value"}'}) =>
-      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    void mockResponse(int statusCode,
+            {String body = '{"any_key":"any_value"}'}) =>
+        mockRequest().thenAnswer((_) async => Response(body, statusCode));
 
     void mockError() => mockRequest().thenThrow(Exception());
 
@@ -41,35 +42,33 @@ void main() {
     });
 
     test('Should call post with correct values', () async {
-      await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'});
-      verify(client.post(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json'
-        },
-        body: '{"any_key":"any_value"}'
-      ));
+      await sut
+          .request(url: url, method: 'post', body: {'any_key': 'any_value'});
+      verify(client.post(url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+          },
+          body: '{"any_key":"any_value"}'));
 
-      await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'}, headers: {'any_header': 'any_value'});
-      verify(client.post(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json',
-          'any_header': 'any_value'
-        },
-        body: '{"any_key":"any_value"}'
-      ));
+      await sut.request(
+          url: url,
+          method: 'post',
+          body: {'any_key': 'any_value'},
+          headers: {'any_header': 'any_value'});
+      verify(client.post(url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            'any_header': 'any_value'
+          },
+          body: '{"any_key":"any_value"}'));
     });
 
     test('Should call post without body', () async {
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(
-        any,
-        headers: anyNamed('headers')
-      ));
+      verify(client.post(any, headers: anyNamed('headers')));
     });
 
     test('Should return data if post returns 200', () async {
@@ -161,10 +160,11 @@ void main() {
 
   group('get', () {
     PostExpectation mockRequest() =>
-      when(client.get(any, headers: anyNamed('headers')));
+        when(client.get(any, headers: anyNamed('headers')));
 
-    void mockResponse(int statusCode, {String body = '{"any_key":"any_value"}'}) =>
-      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    void mockResponse(int statusCode,
+            {String body = '{"any_key":"any_value"}'}) =>
+        mockRequest().thenAnswer((_) async => Response(body, statusCode));
 
     void mockError() => mockRequest().thenThrow(Exception());
 
@@ -174,23 +174,18 @@ void main() {
 
     test('Should call get with correct values', () async {
       await sut.request(url: url, method: 'get');
-      verify(client.get(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json'
-        }
-      ));
+      verify(client.get(url, headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      }));
 
-      await sut.request(url: url, method: 'get', headers: {'any_header': 'any_value'});
-      verify(client.get(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json',
-          'any_header': 'any_value'
-        }
-      ));
+      await sut.request(
+          url: url, method: 'get', headers: {'any_header': 'any_value'});
+      verify(client.get(url, headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'any_header': 'any_value'
+      }));
     });
 
     test('Should return data if get returns 200', () async {
@@ -281,11 +276,12 @@ void main() {
   });
 
   group('put', () {
-    PostExpectation mockRequest() =>
-      when(client.put(any, body: anyNamed('body'), headers: anyNamed('headers')));
+    PostExpectation mockRequest() => when(
+        client.put(any, body: anyNamed('body'), headers: anyNamed('headers')));
 
-    void mockResponse(int statusCode, {String body = '{"any_key":"any_value"}'}) =>
-      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    void mockResponse(int statusCode,
+            {String body = '{"any_key":"any_value"}'}) =>
+        mockRequest().thenAnswer((_) async => Response(body, statusCode));
 
     void mockError() => mockRequest().thenThrow(Exception());
 
@@ -294,35 +290,33 @@ void main() {
     });
 
     test('Should call put with correct values', () async {
-      await sut.request(url: url, method: 'put', body: {'any_key': 'any_value'});
-      verify(client.put(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json'
-        },
-        body: '{"any_key":"any_value"}'
-      ));
+      await sut
+          .request(url: url, method: 'put', body: {'any_key': 'any_value'});
+      verify(client.put(url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+          },
+          body: '{"any_key":"any_value"}'));
 
-      await sut.request(url: url, method: 'put', body: {'any_key': 'any_value'}, headers: {'any_header': 'any_value'});
-      verify(client.put(
-        url,
-        headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json',
-          'any_header': 'any_value'
-        },
-        body: '{"any_key":"any_value"}'
-      ));
+      await sut.request(
+          url: url,
+          method: 'put',
+          body: {'any_key': 'any_value'},
+          headers: {'any_header': 'any_value'});
+      verify(client.put(url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            'any_header': 'any_value'
+          },
+          body: '{"any_key":"any_value"}'));
     });
 
     test('Should call put without body', () async {
       await sut.request(url: url, method: 'put');
 
-      verify(client.put(
-        any,
-        headers: anyNamed('headers')
-      ));
+      verify(client.put(any, headers: anyNamed('headers')));
     });
 
     test('Should return data if put returns 200', () async {

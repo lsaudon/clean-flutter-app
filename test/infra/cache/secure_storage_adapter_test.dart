@@ -21,8 +21,8 @@ void main() {
   });
 
   group('save', () {
-    void mockSaveSecureError() =>
-      when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+    void mockSaveSecureError() => when(
+            secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
         .thenThrow(Exception());
 
     test('Should call save secure with correct values', () async {
@@ -36,21 +36,20 @@ void main() {
 
       final future = sut.save(key: key, value: value);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
   group('fetch', () {
     PostExpectation mockFetchSecureCall() =>
-      when(secureStorage.read(key: anyNamed('key')));
+        when(secureStorage.read(key: anyNamed('key')));
 
-    void mockFetchSecure() => mockFetchSecureCall().thenAnswer((_) async => value);
+    void mockFetchSecure() =>
+        mockFetchSecureCall().thenAnswer((_) async => value);
 
     void mockFetchSecureError() => mockFetchSecureCall().thenThrow(Exception());
 
-    setUp(() {
-      mockFetchSecure();
-    });
+    setUp(mockFetchSecure);
 
     test('Should call fetch secure with correct value', () async {
       await sut.fetch(key);
@@ -69,13 +68,13 @@ void main() {
 
       final future = sut.fetch(key);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
   group('delete', () {
     void mockDeleteSecureError() =>
-      when(secureStorage.delete(key: anyNamed('key'))).thenThrow(Exception());
+        when(secureStorage.delete(key: anyNamed('key'))).thenThrow(Exception());
 
     test('Should call delete with correct key', () async {
       await sut.delete(key);
@@ -88,7 +87,7 @@ void main() {
 
       final future = sut.delete(key);
 
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }

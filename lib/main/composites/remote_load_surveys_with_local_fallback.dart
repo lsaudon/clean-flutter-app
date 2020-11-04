@@ -9,22 +9,21 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   final RemoteLoadSurveys remote;
   final LocalLoadSurveys local;
 
-  RemoteLoadSurveysWithLocalFallback({
-    @required this.remote,
-    @required this.local
-  });
+  RemoteLoadSurveysWithLocalFallback(
+      {@required this.remote, @required this.local});
 
+  @override
   Future<List<SurveyEntity>> load() async {
     try {
       final surveys = await remote.load();
       await local.save(surveys);
       return surveys;
-    } catch(error) {
+    } catch (error) {
       if (error == DomainError.accessDenied) {
         rethrow;
       }
       await local.validate();
-      return await local.load();
+      return local.load();
     }
   }
 }

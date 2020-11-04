@@ -17,10 +17,8 @@ void main() {
   String url;
   List<Map> list;
 
-  PostExpectation mockRequest() => when(httpClient.request(
-    url: anyNamed('url'),
-    method: anyNamed('method')
-  ));
+  PostExpectation mockRequest() => when(
+      httpClient.request(url: anyNamed('url'), method: anyNamed('method')));
 
   void mockHttpData(List<Map> data) {
     list = data;
@@ -61,7 +59,9 @@ void main() {
     ]);
   });
 
-  test('Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
+  test(
+      'Should throw UnexpectedError if HttpClient returns 200 with invalid data',
+      () async {
     mockHttpData(FakeSurveysFactory.makeInvalidApiJson());
 
     final future = sut.load();

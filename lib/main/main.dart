@@ -6,10 +6,12 @@ import '../ui/components/components.dart';
 import 'factories/factories.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
+  const App({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -21,11 +23,15 @@ class App extends StatelessWidget {
       theme: makeAppTheme(),
       navigatorObservers: [routeObserver],
       initialRoute: '/',
-      getPages: [
+      getPages: const [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
-        GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(
+            name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
         GetPage(name: '/signup', page: makeSignUpPage),
-        GetPage(name: '/surveys', page: makeSurveysPage, transition: Transition.fadeIn),
+        GetPage(
+            name: '/surveys',
+            page: makeSurveysPage,
+            transition: Transition.fadeIn),
         GetPage(name: '/survey_result/:survey_id', page: makeSurveyResultPage),
       ],
     );
