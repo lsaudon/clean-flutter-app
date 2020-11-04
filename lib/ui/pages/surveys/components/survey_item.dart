@@ -10,7 +10,7 @@ class SurveyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SurveysPresenter>(context);
+    final presenter = Provider.of<SurveysPresenter>(context, listen: false);
     return GestureDetector(
       onTap: () => presenter.goToSurveyResult(viewModel.id),
       child: Padding(

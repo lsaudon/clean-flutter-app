@@ -9,7 +9,7 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SignUpPresenter>(context);
+    final presenter = Provider.of<SignUpPresenter>(context, listen: false);
     return StreamBuilder<UIError>(
       stream: presenter.emailErrorStream,
       builder: (context, snapshot) {

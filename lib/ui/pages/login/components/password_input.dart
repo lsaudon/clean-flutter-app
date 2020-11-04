@@ -9,7 +9,7 @@ class PasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<LoginPresenter>(context);
+    final presenter = Provider.of<LoginPresenter>(context, listen: false);
     return StreamBuilder<UIError>(
         stream: presenter.passwordErrorStream,
         builder: (context, snapshot) {

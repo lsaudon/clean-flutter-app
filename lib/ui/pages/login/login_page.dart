@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget
                   Headline1(text: R.string.login),
                   Padding(
                     padding: const EdgeInsets.all(32),
-                    child: Provider(
+                    child: InheritedProvider(
                       create: (_) => presenter,
                       child: Form(
                         child: Column(
